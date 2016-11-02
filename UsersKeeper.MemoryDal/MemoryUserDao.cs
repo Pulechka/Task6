@@ -16,22 +16,17 @@ namespace UsersKeeper.MemoryDal
         {
             users = new List<User>()
             {
-                new User {Id = 1, Name = "User1", BirthDate = new DateTime(1994,4,11) },
-                new User {Id = 2, Name = "User2", BirthDate = new DateTime(1971,6,30) },
-                new User {Id = 3, Name = "User3", BirthDate = new DateTime(1997,6,1) },
+                new User {Id = new Guid(), Name = "User1", BirthDate = new DateTime(1994,4,11) },
+                new User {Id = new Guid(), Name = "User2", BirthDate = new DateTime(1971,6,30) },
+                new User {Id = new Guid(), Name = "User3", BirthDate = new DateTime(1997,6,1) },
             };
         }
 
         public bool Add(User user)
         {
-            if (users.Count == 0)
-            {
-                user.Id = 1;
-            }
-            else
-            {
-                user.Id = users.Max(u => u.Id) + 1;
-            }
+            if (user == null)
+                throw new ArgumentNullException("User can't be null", nameof(user));
+            user.Id = Guid.NewGuid();
             users.Add(user);
             return true;
         }
@@ -41,12 +36,11 @@ namespace UsersKeeper.MemoryDal
             return users;
         }
 
-        public bool Delete(int id)
+        public bool Delete(Guid id)
         {
-            if (users.RemoveAll(user => user.Id == id) > 0)
-                return true;
-            else
-                return false;
+            if (users.RemoveAll(user => user.Id == id) == 0)
+                throw new ArgumentException("Incorrect user ID", nameof(id));
+            return true;
         }
     }
 }

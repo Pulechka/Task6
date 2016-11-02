@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UsersKeeper.Entities;
 
 namespace UsersKeeper.DalContracts
@@ -6,7 +7,7 @@ namespace UsersKeeper.DalContracts
     public interface IUserDao
     {
         bool Add(User user);
-        bool Delete(int id);
+        bool Delete(Guid userId);
         IEnumerable<User> GetAll();
     }
 }

@@ -4,22 +4,22 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UsersKeeper.BllContracts;
 using UsersKeeper.Entities;
-using UsersKeeper.Logic;
+using UsersKeeper.Providers;
 
-namespace UsersKeeper.UI
+namespace UsersKeeper.ConsoleUI
 {
     class Program
     {
-        private static UserLogic userLogic;
+        private static IUserLogic userLogic;
         private static ConsoleColor original;
 
         static void Main(string[] args)
         {
-            original = Console.ForegroundColor;
             try
             {
-                userLogic = new UserLogic();
+                userLogic = Provider.UserLogic;
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -28,11 +28,14 @@ namespace UsersKeeper.UI
                 return;
             }
 
+            original = Console.ForegroundColor;
+
             while (true)
             {
                 ShowMenu();
                 string userInput = Console.ReadLine();
-                Console.WriteLine();
+                Console.Clear();
+
                 switch (userInput)
                 {
                     case "1":
@@ -54,45 +57,38 @@ namespace UsersKeeper.UI
             }
         }
 
+
         private static void ShowMenu()
         {
+            Console.WriteLine("Enter action:");
             Console.WriteLine("1 - Show all users");
             Console.WriteLine("2 - Add new user");
             Console.WriteLine("3 - Delete user");
             Console.WriteLine("0 - Exit");
         }
 
-        private static void DeleteUser()
-        {
-            ShowUsers();
-            int id = 0;
-            while (id == 0)
-            {
-                Console.Write("Enter user ID for delete: ");
-                int.TryParse(Console.ReadLine(), out id);
-                if (id == 0)
-                {
-                    ShowColorText("Incorrect ID format!", ConsoleColor.Red);
-                }
-            }
 
+        private static void ShowUsers()
+        {
             try
             {
-                if (userLogic.Delete(id))
+                IEnumerable<User> users = userLogic.GetAll().OrderBy(user => user.Name);
+                int num = 0;
+                foreach (var user in users)
                 {
-                    ShowColorText($"User with ID {id} was deleted", ConsoleColor.Green);
+                    Console.WriteLine($"User {++num}:");
+                    Console.WriteLine($"Name: {user.Name}");
+                    Console.WriteLine($"Birth date: {user.BirthDate.ToShortDateString()}");
+                    Console.WriteLine($"Age: {user.Age}");
+                    Console.WriteLine();
                 }
-                else
-                {
-                    ShowColorText($"Error! Can't delete user with ID {id}", ConsoleColor.Red);
-                }
-
             }
             catch
             {
-                ShowColorText("Error! Can't delete user", ConsoleColor.Red);
+                ShowColorText("Error! Can't show users", ConsoleColor.Red);
             }
         }
+
 
         private static void AddUser()
         {
@@ -101,19 +97,13 @@ namespace UsersKeeper.UI
             Console.Write("Name: ");
             string name = Console.ReadLine();
 
-            DateTime birthDate = DateTime.MinValue;
-            while (birthDate == DateTime.MinValue)
-            {
-                Console.Write("Birth date: ");
-                DateTime.TryParse(Console.ReadLine(), out birthDate);
-                if (birthDate == DateTime.MinValue)
-                    ShowColorText("Incorrect date format!", ConsoleColor.Red);
-            }
+            DateTime birthDate;
+            IsValidBirthDate(out birthDate);
 
             try
             {
-                int id = userLogic.Add(name, birthDate);
-                ShowColorText($"User with id {id} was added", ConsoleColor.Green);
+                Guid id = userLogic.Add(name, birthDate);
+                ShowColorText($"User was added", ConsoleColor.Green);
             }
             catch (ArgumentException ex)
             {
@@ -135,25 +125,65 @@ namespace UsersKeeper.UI
 
         }
 
-        private static void ShowUsers()
+
+        private static void DeleteUser()
         {
+            var users = userLogic.GetAll().OrderBy(user=>user.Name);
+            int max = users.Count();
+
+            ShowUsers();
+            int number;
+            if (!IsValidNumber(max, out number))
+                return;
+            number--;
+            Guid id = users.Skip(number).Select(user => user.Id).First();
+
             try
             {
-                IEnumerable<User> users = userLogic.GetAll().OrderBy(user => user.Id);
-                foreach (var user in users)
-                {
-                    Console.WriteLine($"User {user.Id}:");
-                    Console.WriteLine($"Name: {user.Name}");
-                    Console.WriteLine($"Birth date: {user.BirthDate.ToShortDateString()}");
-                    Console.WriteLine($"Age: {user.Age}");
-                    Console.WriteLine();
-                }
+                if (userLogic.Delete(id))
+                    ShowColorText($"User with number {++number} was deleted", ConsoleColor.Green);
+                else
+                    ShowColorText($"Error! Can't delete user with number {++number}", ConsoleColor.Red);
             }
             catch
             {
-                ShowColorText("Error! Can't show users", ConsoleColor.Red);
+                ShowColorText("Error! Can't delete user", ConsoleColor.Red);
             }
         }
+
+
+        private static bool IsValidNumber(int max, out int number)
+        {
+            number = 0;
+            Console.Write("Enter user number for delete: ");
+            int.TryParse(Console.ReadLine(), out number);
+            if (number == 0)
+            {
+                ShowColorText("Incorrect number format!", ConsoleColor.Red);
+                return false;
+            }
+            else if (number < 0 || number > max)
+            {
+                ShowColorText("Invalid user number!", ConsoleColor.Red);
+                return false;
+            }
+            return true;
+        }
+
+
+        private static bool IsValidBirthDate(out DateTime birthDate)
+        {
+            birthDate = DateTime.MinValue;
+            Console.Write("Birth date: ");
+            DateTime.TryParse(Console.ReadLine(), out birthDate);
+            if (birthDate == DateTime.MinValue)
+            {
+                ShowColorText("Incorrect date format!", ConsoleColor.Red);
+                return false;
+            }
+            return true;
+        }
+
 
         private static void ShowColorText(string text, ConsoleColor color)
         {

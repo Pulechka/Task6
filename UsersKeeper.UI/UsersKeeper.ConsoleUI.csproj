@@ -7,8 +7,8 @@
     <ProjectGuid>{0FFAAC8E-8578-4890-B70B-EEE7EDDA2768}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UsersKeeper.UI</RootNamespace>
-    <AssemblyName>UsersKeeper.UI</AssemblyName>
+    <RootNamespace>UsersKeeper.ConsoleUI</RootNamespace>
+    <AssemblyName>UsersKeeper.ConsoleUI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -36,6 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,13 +52,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UsersKeeper.BllContracts\UsersKeeper.BllContracts.csproj">
+      <Project>{cb4ba228-57be-4699-80d0-408c79986e49}</Project>
+      <Name>UsersKeeper.BllContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UsersKeeper.Entities\UsersKeeper.Entities.csproj">
       <Project>{19122f6c-36f1-4cb7-9675-1ef874174a9a}</Project>
       <Name>UsersKeeper.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UsersKeeper.Logic\UsersKeeper.Logic.csproj">
-      <Project>{9852c84c-3b73-4ce4-af93-ac50fec7a8d5}</Project>
-      <Name>UsersKeeper.Logic</Name>
+    <ProjectReference Include="..\UsersKeeper.Provider\UsersKeeper.PI.Providers.csproj">
+      <Project>{82f3069e-6f1d-4f57-b1eb-d404625a5352}</Project>
+      <Name>UsersKeeper.PI.Providers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -45,6 +45,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UsersKeeper.BllContracts\UsersKeeper.BllContracts.csproj">
+      <Project>{cb4ba228-57be-4699-80d0-408c79986e49}</Project>
+      <Name>UsersKeeper.BllContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UsersKeeper.DalContracts\UsersKeeper.DalContracts.csproj">
       <Project>{d3c8a55a-2418-4ca7-a50c-f82d4bbd391d}</Project>
       <Name>UsersKeeper.DalContracts</Name>
@@ -52,14 +56,6 @@
     <ProjectReference Include="..\UsersKeeper.Entities\UsersKeeper.Entities.csproj">
       <Project>{19122f6c-36f1-4cb7-9675-1ef874174a9a}</Project>
       <Name>UsersKeeper.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UsersKeeper.FileDal\UsersKeeper.FileDal.csproj">
-      <Project>{2817473f-63d5-4db6-994a-67579dea1cad}</Project>
-      <Name>UsersKeeper.FileDal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UsersKeeper.MemoryDal\UsersKeeper.MemoryDal.csproj">
-      <Project>{5a912deb-cf79-4796-8fc3-b27d9c9234d9}</Project>
-      <Name>UsersKeeper.MemoryDal</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
