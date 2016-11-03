@@ -15,11 +15,13 @@ namespace UsersKeeper.FileDal
         private static List<User> users;
         private static string storageFileName;
 
-        static FileUserDao()
+        public FileUserDao()
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
 
             storageFileName = ConfigurationManager.AppSettings["UsersFilePath"];
+            if (storageFileName == null)
+                throw new ConfigurationErrorsException("Invalid parameter \"UsersFilePath\"");
             using (var file = File.Open(storageFileName, FileMode.OpenOrCreate)) { }
 
             users = File.ReadAllLines(storageFileName, Encoding.Unicode).Select(line =>
@@ -38,7 +40,7 @@ namespace UsersKeeper.FileDal
         public bool Add(User user)
         {
             if (user == null)
-                throw new ArgumentNullException("User can't be null", nameof(user));
+                throw new ArgumentNullException("Incorrect value", nameof(user));
             user.Id = Guid.NewGuid();
             users.Add(user);
             return true;
@@ -57,8 +59,9 @@ namespace UsersKeeper.FileDal
         }
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
-        {
-            File.WriteAllLines(storageFileName, users
+        { 
+            if (storageFileName != null)
+                File.WriteAllLines(storageFileName, users
                                         .Select(user => $"{user.Id}|{user.Name}|{user.BirthDate}")
                                         .ToArray(), Encoding.Unicode);
         }

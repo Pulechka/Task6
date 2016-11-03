@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace UsersKeeper.Entities
 {
@@ -19,5 +20,6 @@ namespace UsersKeeper.Entities
         public DateTime BirthDate { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public List<Award> Awards { get; set; }
     }
 }

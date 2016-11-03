@@ -12,14 +12,65 @@ using UsersKeeper.MemoryDal;
 
 namespace UsersKeeper.Providers
 {
-    public static class Provider
+    public class Provider
     {
-        public static IUserLogic UserLogic { get; private set; }
-        public static IUserDao UserDao { get; private set; }
+        private static Provider instance;
 
-        static Provider()
+        public static Provider Instance
         {
-            string dalType = ConfigurationManager.AppSettings["dalType"];
+            get
+            {
+                if (instance == null)
+                    instance = new Provider();
+                return instance;
+            }
+        }
+
+        public IUserLogic UserLogic { get; private set; }
+        public IUserDao UserDao { get; private set; }
+        public IAwardLogic AwardLogic { get; private set; }
+        public IAwardDao AwardDao { get; private set; }
+        public IUserAwardLogic UserAwardLogic { get; private set; }
+        public IUserAwardDao UserAwardDao { get; private set; }
+
+
+        private Provider()
+        {
+            try
+            {
+                LoadUserDalType();
+                LoadUserBllType();
+                LoadAwardDalType();
+                LoadAwardBllType();
+                LoadUserAwardDalType();
+                LoadUserAwardBllType();
+            }
+            catch (ConfigurationErrorsException)
+            {
+                throw;
+            }
+        }
+
+        private void LoadUserBllType()
+        {
+            string bllType = ConfigurationManager.AppSettings["UserBllType"];
+            if (bllType == null)
+                throw new ConfigurationErrorsException($"Missed UserBllType");
+            switch (bllType.ToLower())
+            {
+                case "basic":
+                    UserLogic = new UserLogic(UserDao);
+                    break;
+                default:
+                    throw new ConfigurationErrorsException($"Invalid UserBllType {bllType}");
+            }
+        }
+
+        private void LoadUserDalType()
+        {
+            string dalType = ConfigurationManager.AppSettings["UserDalType"];
+            if (dalType == null)
+                throw new ConfigurationErrorsException($"Missed UserDalType");
             switch (dalType.ToLower())
             {
                 case "bigfiles":
@@ -32,17 +83,68 @@ namespace UsersKeeper.Providers
                     UserDao = new MemoryUserDao();
                     break;
                 default:
-                    throw new ConfigurationErrorsException($"Invalid dalType {dalType}");
+                    throw new ConfigurationErrorsException($"Invalid UserDalType {dalType}");
             }
+        }
 
-            string bllType = ConfigurationManager.AppSettings["bllType"];
+        private void LoadAwardDalType()
+        {
+            string dalType = ConfigurationManager.AppSettings["AwardDalType"];
+            if (dalType == null)
+                throw new ConfigurationErrorsException($"Missed AwardDalType");
+            switch (dalType.ToLower())
+            {
+                case "files":
+                    AwardDao = new FileAwardDao();
+                    break;
+                default:
+                    throw new ConfigurationErrorsException($"Invalid AwardDalType {dalType}");
+            }
+        }
+
+        private void LoadAwardBllType()
+        {
+            string bllType = ConfigurationManager.AppSettings["AwardBllType"];
+            if (bllType == null)
+                throw new ConfigurationErrorsException($"Missed AwardBllType");
             switch (bllType.ToLower())
             {
                 case "basic":
-                    UserLogic = new UserLogic(UserDao);
+                    AwardLogic = new AwardLogic(AwardDao);
                     break;
                 default:
-                    throw new ConfigurationErrorsException($"Invalid bllType {bllType}");
+                    throw new ConfigurationErrorsException($"Invalid AwardBllType {bllType}");
+            }
+        }
+
+        private void LoadUserAwardDalType()
+        {
+            string dalType = ConfigurationManager.AppSettings["UserAwardDalType"];
+            if (dalType == null)
+                throw new ConfigurationErrorsException($"Missed UserAwardDalType");
+            switch (dalType.ToLower())
+            {
+                case "files":
+                    UserAwardDao = new FileUserAwardDao();
+                    break;
+                default:
+                    throw new ConfigurationErrorsException($"Invalid UserAwardDalType {dalType}");
+            }
+        }
+
+
+        private void LoadUserAwardBllType()
+        {
+            string bllType = ConfigurationManager.AppSettings["UserAwardBllType"];
+            if (bllType == null)
+                throw new ConfigurationErrorsException($"Missed UserAwardBllType");
+            switch (bllType.ToLower())
+            {
+                case "basic":
+                    UserAwardLogic = new UserAwardLogic(UserLogic, AwardLogic, UserAwardDao);
+                    break;
+                default:
+                    throw new ConfigurationErrorsException($"Invalid UserAwardBllType {bllType}");
             }
         }
     }

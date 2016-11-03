@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PL", "PL", "{6B8CE23D-B52B-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{FB7863FF-6D65-4952-A79C-8A9EBD8764CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersKeeper.PI.Providers", "UsersKeeper.Provider\UsersKeeper.PI.Providers.csproj", "{82F3069E-6F1D-4F57-B1EB-D404625A5352}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersKeeper.DI.Providers", "UsersKeeper.Provider\UsersKeeper.DI.Providers.csproj", "{82F3069E-6F1D-4F57-B1EB-D404625A5352}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersKeeper.BllContracts", "UsersKeeper.BllContracts\UsersKeeper.BllContracts.csproj", "{CB4BA228-57BE-4699-80D0-408C79986E49}"
 EndProject

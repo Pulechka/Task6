@@ -7,10 +7,9 @@ using UsersKeeper.Entities;
 
 namespace UsersKeeper.BllContracts
 {
-    public interface IUserLogic
+    public interface IAwardLogic
     {
-        bool Add(string name, DateTime birthDate);
-        IEnumerable<User> GetAll();
-        bool Delete(Guid id);
+        bool Add(string title);
+        IEnumerable<Award> GetAll();
     }
 }

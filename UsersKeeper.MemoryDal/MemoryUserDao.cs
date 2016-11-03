@@ -25,7 +25,7 @@ namespace UsersKeeper.MemoryDal
         public bool Add(User user)
         {
             if (user == null)
-                throw new ArgumentNullException("User can't be null", nameof(user));
+                throw new ArgumentNullException("Incorrect value", nameof(user));
             user.Id = Guid.NewGuid();
             users.Add(user);
             return true;

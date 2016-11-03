@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigFileUserDao.cs" />
+    <Compile Include="FileAwardDao.cs" />
+    <Compile Include="FileUserAwardDao.cs" />
     <Compile Include="FileUserDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

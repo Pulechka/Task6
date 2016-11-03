@@ -12,48 +12,56 @@ namespace UsersKeeper.ConsoleUI
 {
     class Program
     {
-        private static IUserLogic userLogic;
+        private static IUserAwardLogic userAwardLogic;
+
         private static ConsoleColor original;
+
 
         static void Main(string[] args)
         {
             try
             {
-                userLogic = Provider.UserLogic;
+                userAwardLogic = Provider.Instance.UserAwardLogic;
+
+                original = Console.ForegroundColor;
+
+                while (true)
+                {
+                    ShowMenu();
+                    string userInput = Console.ReadLine();
+                    Console.Clear();
+
+                    switch (userInput)
+                    {
+                        case "1":
+                            ShowUsers();
+                            break;
+                        case "2":
+                            AddUser();
+                            break;
+                        case "3":
+                            DeleteUser();
+                            break;
+                        case "4":
+                            ShowAwards();
+                            break;
+                        case "5":
+                            AddAward();
+                            break;
+                        case "0":
+                            return;
+                        default:
+                            ShowColorText("Incorrect command!", ConsoleColor.Red);
+                            break;
+                    }
+                    Console.WriteLine();
+                }
             }
             catch (ConfigurationErrorsException ex)
             {
                 Console.WriteLine("Error in configuration file:");
                 ShowColorText(ex.BareMessage, ConsoleColor.Red);
                 return;
-            }
-
-            original = Console.ForegroundColor;
-
-            while (true)
-            {
-                ShowMenu();
-                string userInput = Console.ReadLine();
-                Console.Clear();
-
-                switch (userInput)
-                {
-                    case "1":
-                        ShowUsers();
-                        break;
-                    case "2":
-                        AddUser();
-                        break;
-                    case "3":
-                        DeleteUser();
-                        break;
-                    case "0":
-                        return;
-                    default:
-                        ShowColorText("Incorrect command!", ConsoleColor.Red);
-                        break;
-                }
-                Console.WriteLine();
             }
         }
 
@@ -64,7 +72,45 @@ namespace UsersKeeper.ConsoleUI
             Console.WriteLine("1 - Show all users");
             Console.WriteLine("2 - Add new user");
             Console.WriteLine("3 - Delete user");
+            Console.WriteLine("4 - Show all awards");
+            Console.WriteLine("5 - Add award");
             Console.WriteLine("0 - Exit");
+        }
+
+
+        private static void AddAward()
+        {
+            Console.WriteLine("Enter award's title:");
+            string title = Console.ReadLine();
+            try
+            {
+                if (userAwardLogic.AddAward(title))
+                    ShowColorText("Award was added", ConsoleColor.Green);
+                else
+                    ShowColorText("Unknown error! Can't add award", ConsoleColor.Red);
+            }
+            catch (Exception)
+            {
+                ShowColorText("Unknown error! Can't add award", ConsoleColor.Red);
+            }
+        }
+
+
+        private static void ShowAwards()
+        {
+            try
+            {
+                IEnumerable<Award> awards = userAwardLogic.GetAllAwards();
+                int number = 0;
+                foreach (var award in awards)
+                {
+                    Console.WriteLine($"{++number}. {award.Title}");
+                }
+            }
+            catch
+            {
+                ShowColorText("Error! Can't show awards", ConsoleColor.Red);
+            }
         }
 
 
@@ -72,7 +118,7 @@ namespace UsersKeeper.ConsoleUI
         {
             try
             {
-                IEnumerable<User> users = userLogic.GetAll().OrderBy(user => user.Name);
+                IEnumerable<User> users = userAwardLogic.GetAllUsers().OrderBy(user => user.Name);
                 int num = 0;
                 foreach (var user in users)
                 {
@@ -80,6 +126,11 @@ namespace UsersKeeper.ConsoleUI
                     Console.WriteLine($"Name: {user.Name}");
                     Console.WriteLine($"Birth date: {user.BirthDate.ToShortDateString()}");
                     Console.WriteLine($"Age: {user.Age}");
+                    Console.WriteLine("Awards:");
+                    foreach (var award in user.Awards)
+                    {
+                        Console.WriteLine($"-{award.Title}");
+                    }
                     Console.WriteLine();
                 }
             }
@@ -102,8 +153,10 @@ namespace UsersKeeper.ConsoleUI
 
             try
             {
-                Guid id = userLogic.Add(name, birthDate);
-                ShowColorText($"User was added", ConsoleColor.Green);
+                if (userAwardLogic.AddUser(name, birthDate))
+                    ShowColorText($"User was added", ConsoleColor.Green);
+                else
+                    ShowColorText("Unknown error! Can't add user", ConsoleColor.Red);
             }
             catch (ArgumentException ex)
             {
@@ -120,15 +173,14 @@ namespace UsersKeeper.ConsoleUI
             }
             catch (Exception)
             {
-                ShowColorText("Error! Can't add user", ConsoleColor.Red);
+                ShowColorText("Unknown error! Can't add user", ConsoleColor.Red);
             }
-
         }
 
 
         private static void DeleteUser()
         {
-            var users = userLogic.GetAll().OrderBy(user=>user.Name);
+            var users = userAwardLogic.GetAllUsers().OrderBy(user=>user.Name);
             int max = users.Count();
 
             ShowUsers();
@@ -140,7 +192,7 @@ namespace UsersKeeper.ConsoleUI
 
             try
             {
-                if (userLogic.Delete(id))
+                if (userAwardLogic.DeleteUser(id))
                     ShowColorText($"User with number {++number} was deleted", ConsoleColor.Green);
                 else
                     ShowColorText($"Error! Can't delete user with number {++number}", ConsoleColor.Red);

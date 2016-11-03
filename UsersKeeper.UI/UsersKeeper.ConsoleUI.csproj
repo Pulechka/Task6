@@ -60,9 +60,9 @@
       <Project>{19122f6c-36f1-4cb7-9675-1ef874174a9a}</Project>
       <Name>UsersKeeper.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UsersKeeper.Provider\UsersKeeper.PI.Providers.csproj">
+    <ProjectReference Include="..\UsersKeeper.Provider\UsersKeeper.DI.Providers.csproj">
       <Project>{82f3069e-6f1d-4f57-b1eb-d404625a5352}</Project>
-      <Name>UsersKeeper.PI.Providers</Name>
+      <Name>UsersKeeper.DI.Providers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

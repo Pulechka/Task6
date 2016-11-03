@@ -19,7 +19,7 @@ namespace UsersKeeper.Logic
             userDao = dao;
         }
 
-        public Guid Add(string name, DateTime birthDate)
+        public bool Add(string name, DateTime birthDate)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name can't be empty or whitespace", nameof(name));
@@ -33,21 +33,42 @@ namespace UsersKeeper.Logic
                 BirthDate = birthDate,
             };
 
-            if (userDao.Add(user))
+            try
             {
-                return user.Id;
+                if (userDao.Add(user))
+                {
+                    return true;
+                }
+                throw new InvalidOperationException("Unknown error on user adding");
             }
-            throw new InvalidOperationException("Unknown error on user adding");
+            catch
+            {
+                throw;
+            }
         }
 
         public IEnumerable<User> GetAll()
         {
-            return userDao.GetAll().ToList();
+            try
+            {
+                return userDao.GetAll().ToList();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public bool Delete(Guid id)
         {
-            return userDao.Delete(id);
+            try
+            {
+                return userDao.Delete(id);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }
