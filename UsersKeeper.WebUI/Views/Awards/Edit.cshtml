@@ -1,0 +1,86 @@
+﻿@using UsersKeeper.WebUI.Models
+
+@{
+    Page.Title = "Award editing";
+}
+
+@{
+    string title = string.Empty;
+    Guid id = new Guid();
+}
+
+@{
+    if (IsPost)
+    {
+        if (Request["btn-edit"] != null)
+        {
+            title = Request["title"];
+            id = Guid.Parse(Request["id"]);
+        }
+
+        if (Request["btn-update"] != null)
+        {
+            try
+            {
+                title = Request["title"];
+                id = Guid.Parse(Request["id"]);
+
+                var imageData = Request.Files["image"];
+                if (!string.IsNullOrWhiteSpace(imageData.FileName))
+                {
+                    var type = imageData.ContentType;
+                    var binary = new byte[imageData.ContentLength];
+                    using (BinaryReader reader = new BinaryReader(imageData.InputStream))
+                    {
+                        for (int i = 0; i < binary.Length; i++)
+                        {
+                            binary[i] = reader.ReadByte();
+                        }
+                    }
+                    Provider.AwardImageLogic.SetAwardImage(id, type, binary);
+                }
+
+                var result = Provider.UserAwardLogic.UpdateAward(id, title);
+                if (result)
+                {
+                    Response.Redirect("~/Views/Awards/Index");
+                }
+                else
+                {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-danger" role="alert">Can't save editing award! Please, try again later</div>
+                    </div>
+                </div>
+                }
+            }
+            catch
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-danger" role="alert">Can't save editing award! Please, try again later</div>
+                    </div>
+                </div>
+            }
+        }
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form class="col-md-6 col-md-push-3" method="post" enctype="multipart/form-data">
+            <h4>Edit award data</h4>
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" class="form-control" name="title" value="@title">
+            </div>
+            <img class="img-responsive" src="~/Views/Images/GetAwardImage?id=@id" />
+            <div class="form-group">
+                <label for="image">Load image</label>
+                <input type="file" name="image">
+            </div>
+                <input type="hidden" class="invisible" name="id" value="@id" />
+                <button type="submit" class="btn btn-default" name="btn-update">Save changes</button>
+            </form>
+    </div>
+</div>

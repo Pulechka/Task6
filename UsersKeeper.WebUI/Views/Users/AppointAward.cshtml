@@ -1,0 +1,107 @@
+﻿@using UsersKeeper.WebUI.Models
+@using UsersKeeper.Entities;
+
+@{
+    Page.Title = "Award appointing";
+}
+
+@{
+    var awards = Provider.UserAwardLogic.GetAllAwards();
+    Guid userId = new Guid();
+    string userName = string.Empty;
+    Guid awardId = new Guid();
+    List<AwardDTO> userAwards;
+}
+
+
+@{
+    if (IsPost)
+    {
+        if (Request["btn-appoint_award"] != null)
+        {
+            var stringUserId = Request["user-id"];
+            userName = Request["user-name"];
+
+            if (!Guid.TryParse(stringUserId, out userId) || string.IsNullOrWhiteSpace(userName))
+            {
+                Response.SetStatus(HttpStatusCode.BadRequest);
+                return;
+            }
+        }
+
+        if (Request["btn-save-appoint"] != null)
+        {
+            awardId = Guid.Parse(Request["award-id"]);
+            userId = Guid.Parse(Request["user-id"]);
+            userName = Request["user-name"];
+
+            var result = Provider.UserAwardLogic.AppointAwardToUser(userId, awardId);
+            if (result)
+            {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12 alert alert-success" role="alert">Award appointed to user successfully!</div>
+                        </div>
+                    </div>
+            }
+            else
+            {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12 alert alert-danger" role="alert">Can't appoint award to user! Please, try again later</div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    }
+
+<div class="row">
+    <div class="col-md-12">
+        <h4 class="col-md-12">Choose award to appoint to user <span class="text-primary">@userName</span>:</h4>
+        <div class="invisible">.</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @{
+            userAwards = Provider.UserAwardLogic.GetUserAwards(userId).ToList();
+            foreach (var award in awards)
+            {
+                if (!userAwards.Any(userAward => userAward.Id == award.Id))
+                {
+                    <div class="col-md-3">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <div class="user-name">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        @award.Title
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-body">
+                                <img src="~/Views/Images/GetAwardImage?id=@award.Id" />
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row buttons">
+                                    <div class="col-md-12">
+                                        <form method="post" action="~/Views/Users/AppointAward">
+                                            <input type="hidden" class="invisible" name="award-id" value="@award.Id" />
+                                            <input type="hidden" class="invisible" name="user-id" value="@userId" />
+                                            <input type="hidden" class="invisible" name="user-name" value="@userName" />
+                                            <button type="submit" class="btn btn-primary pull-right" name="btn-save-appoint">Appoint award</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>

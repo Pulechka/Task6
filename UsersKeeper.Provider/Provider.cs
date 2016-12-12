@@ -31,18 +31,16 @@ namespace UsersKeeper.Providers
         public IAwardLogic AwardLogic { get; private set; }
         public IAwardDao AwardDao { get; private set; }
         public IUserAwardLogic UserAwardLogic { get; private set; }
-        public IUserAwardDao UserAwardDao { get; private set; }
 
 
         private Provider()
         {
             try
             {
-                LoadUserDalType();
-                LoadUserBllType();
                 LoadAwardDalType();
+                LoadUserDalType();
                 LoadAwardBllType();
-                LoadUserAwardDalType();
+                LoadUserBllType();
                 LoadUserAwardBllType();
             }
             catch (ConfigurationErrorsException)
@@ -73,11 +71,8 @@ namespace UsersKeeper.Providers
                 throw new ConfigurationErrorsException($"Missed UserDalType");
             switch (dalType.ToLower())
             {
-                case "bigfiles":
-                    UserDao = new BigFileUserDao();
-                    break;
                 case "files":
-                    UserDao = new FileUserDao();
+                    UserDao = new FileUserDao(AwardDao);
                     break;
                 case "memory":
                     UserDao = new MemoryUserDao();
@@ -117,22 +112,6 @@ namespace UsersKeeper.Providers
             }
         }
 
-        private void LoadUserAwardDalType()
-        {
-            string dalType = ConfigurationManager.AppSettings["UserAwardDalType"];
-            if (dalType == null)
-                throw new ConfigurationErrorsException($"Missed UserAwardDalType");
-            switch (dalType.ToLower())
-            {
-                case "files":
-                    UserAwardDao = new FileUserAwardDao();
-                    break;
-                default:
-                    throw new ConfigurationErrorsException($"Invalid UserAwardDalType {dalType}");
-            }
-        }
-
-
         private void LoadUserAwardBllType()
         {
             string bllType = ConfigurationManager.AppSettings["UserAwardBllType"];
@@ -141,7 +120,7 @@ namespace UsersKeeper.Providers
             switch (bllType.ToLower())
             {
                 case "basic":
-                    UserAwardLogic = new UserAwardLogic(UserLogic, AwardLogic, UserAwardDao);
+                    UserAwardLogic = new UserAwardLogic(UserLogic, AwardLogic);
                     break;
                 default:
                     throw new ConfigurationErrorsException($"Invalid UserAwardBllType {bllType}");

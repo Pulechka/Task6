@@ -10,19 +10,19 @@ namespace UsersKeeper.MemoryDal
 {
     public class MemoryUserDao : IUserDao
     {
-        private List<User> users;
+        private List<UserDTO> users;
 
         public MemoryUserDao()
         {
-            users = new List<User>()
+            users = new List<UserDTO>()
             {
-                new User {Id = new Guid(), Name = "User1", BirthDate = new DateTime(1994,4,11) },
-                new User {Id = new Guid(), Name = "User2", BirthDate = new DateTime(1971,6,30) },
-                new User {Id = new Guid(), Name = "User3", BirthDate = new DateTime(1997,6,1) },
+                new UserDTO {Id = new Guid(), Name = "User1", BirthDate = new DateTime(1994,4,11) },
+                new UserDTO {Id = new Guid(), Name = "User2", BirthDate = new DateTime(1971,6,30) },
+                new UserDTO {Id = new Guid(), Name = "User3", BirthDate = new DateTime(1997,6,1) },
             };
         }
 
-        public bool Add(User user)
+        public bool Add(UserDTO user)
         {
             if (user == null)
                 throw new ArgumentNullException("Incorrect value", nameof(user));
@@ -31,7 +31,7 @@ namespace UsersKeeper.MemoryDal
             return true;
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<UserDTO> GetAll()
         {
             return users;
         }
@@ -41,6 +41,46 @@ namespace UsersKeeper.MemoryDal
             if (users.RemoveAll(user => user.Id == id) == 0)
                 throw new ArgumentException("Incorrect user ID", nameof(id));
             return true;
+        }
+
+        public bool Update(Guid id, string newName, DateTime newBirthDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddUser(UserDTO user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteUser(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateUser(Guid id, string newName, DateTime newBirthDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<UserDTO> GetAllUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AppointAwardToUser(Guid userId, Guid awardId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveAwardFromUser(Guid userId, Guid awardId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<AwardDTO> GetUserAwards(Guid userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

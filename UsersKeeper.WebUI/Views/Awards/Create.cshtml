@@ -1,0 +1,53 @@
+﻿@using UsersKeeper.WebUI.Models
+@{
+    Page.Title = "Award creating";
+}
+
+@{
+    if (IsPost)
+    {
+        var title = Request["title"];
+
+        if (!string.IsNullOrWhiteSpace(title))
+        {
+            var result = Provider.UserAwardLogic.AddAward(title);
+            if (result)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-success" role="alert">Award created successfully</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-danger" role="alert">Can't create award! Please, try again later</div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-12 alert alert-danger" role="alert">Awards's data can't be empty!</div>
+                </div>
+            </div>
+        }
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form class="col-md-6 col-md-push-3" method="post">
+            <h4>Enter data for new award</h4>
+            <div class="form-group">
+                <label for="email">Title:</label>
+                <input type="text" class="form-control" name="title">
+            </div>
+            <button type="submit" class="btn btn-default">Create</button>
+        </form>
+    </div>
+</div>

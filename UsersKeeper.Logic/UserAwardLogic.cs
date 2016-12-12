@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UsersKeeper.BllContracts;
 using UsersKeeper.DalContracts;
 using UsersKeeper.Entities;
@@ -13,50 +11,67 @@ namespace UsersKeeper.Logic
     {
         private IUserLogic userLogic;
         private IAwardLogic awardLogic;
-        private IUserAwardDao userAwardDao;
 
-        public UserAwardLogic(IUserLogic uLogic, IAwardLogic aLogic, IUserAwardDao uaDao)
+        public UserAwardLogic(IUserLogic uLogic, IAwardLogic aLogic)
         {
             userLogic = uLogic;
             awardLogic = aLogic;
-            userAwardDao = uaDao;
         }
 
 
         public bool AddAward(string title)
         {
-            return awardLogic.Add(title);
+            return awardLogic.AddAward(title);
         }
 
-        public IEnumerable<Award> GetAllAwards()
+        public IEnumerable<AwardDTO> GetAllAwards()
         {
-            return awardLogic.GetAll();
+            return awardLogic.GetAllAwards();
         }
 
         public bool AddUser(string name, DateTime birthDate)
         {
-            return userLogic.Add(name, birthDate);
+            return userLogic.AddUser(name, birthDate);
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public IEnumerable<UserDTO> GetAllUsers()
         {
-            var users = userLogic.GetAll();
-            var awards = awardLogic.GetAll();
-            var usersAward = userAwardDao.GetAll();
-
-            foreach (var user in users)
-            {
-                var idAwards = usersAward.Where(ua => ua.IdUser == user.Id).Select(ua => ua.IdAward);
-                user.Awards = idAwards.Join(awards, idAward => idAward, award => award.Id, (idAward, award) => award).ToList();
-            }
-
-            return users;
+            return userLogic.GetAllUsers();
         }
 
         public bool DeleteUser(Guid id)
         {
-            userAwardDao.DeleteByUserId(id);
-            return userLogic.Delete(id);
+            return userLogic.DeleteUser(id);
+        }
+
+        public bool DeleteAward(Guid id)
+        {
+            return awardLogic.DeleteAward(id);
+        }
+
+        public bool UpdateAward(Guid id, string newTitle)
+        {
+            return awardLogic.UpdateAward(id, newTitle);
+        }
+
+        public bool UpdateUser(Guid id, string newName, DateTime newBirthDate)
+        {
+            return userLogic.UpdateUser(id, newName, newBirthDate);
+        }
+
+        public bool AppointAwardToUser(Guid userId, Guid awardId)
+        {
+            return userLogic.AppointAwardToUser(userId, awardId);
+        }
+
+        public bool RemoveAwardFromUser(Guid userId, Guid awardId)
+        {
+            return userLogic.RemoveAwardFromUser(userId, awardId);
+        }
+
+        public IEnumerable<AwardDTO> GetUserAwards(Guid userId)
+        {
+            return userLogic.GetUserAwards(userId);
         }
     }
 }

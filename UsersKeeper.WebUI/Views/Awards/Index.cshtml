@@ -1,0 +1,83 @@
+﻿@using UsersKeeper.WebUI.Models
+@{ 
+    Page.Title = "All awards";
+}
+
+@{
+    var awards = Provider.UserAwardLogic.GetAllAwards().ToList();
+}
+
+@{
+    if (IsPost)
+    {
+        if (Request["btn-delete"] != null)
+        {
+            try
+            {
+                var awardId = Guid.Parse(Request["id"]);
+                var result = Provider.UserAwardLogic.DeleteAward(awardId);
+                if (result)
+                {
+                    Response.Redirect("~/Views/Awards/Index");
+                }
+                else
+                {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-danger" role="alert">Can't delete award! Please, try again later</div>
+                    </div>
+                </div>
+                }
+            }
+            catch
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-danger" role="alert">Can't delete award! Please, try again later</div>
+                    </div>
+                </div>
+            }
+        }
+    }
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var award in awards)
+            {
+            <div class="col-md-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <div class="user-name">
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                    @award.Title
+                                    <form method="post" action="~/Views/Awards/Edit">
+                                        <input type="hidden" class="invisible" name="id" value="@award.Id" />
+                                        <input type="hidden" class="invisible" name="title" value="@award.Title" />
+                                        <button type="submit" class="btn btn-primary btn-edit" name="btn-edit">&#9998;</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-body">
+                            <img src="~/Views/Images/GetAwardImage?id=@award.Id" />
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row buttons">
+                                <div class="col-md-12">
+                                    <form method="post" action="~/Views/Awards/Index">
+                                        <input type="hidden" class="invisible" name="id" value="@award.Id" />
+                                        <button type="submit" class="btn btn-danger pull-right" name="btn-delete">Delete award</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        }
+    </div>
+</div>

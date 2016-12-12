@@ -33,6 +33,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,11 +43,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AwardLogic.cs" />
+    <Compile Include="AwardImageLogic.cs" />
+    <Compile Include="UserImageLogic.cs" />
     <Compile Include="UserAwardLogic.cs" />
     <Compile Include="UserLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Extensions\UserKeeper.Extensions.csproj">
+      <Project>{3118e9dd-0f3f-4588-a0a8-f4702f97f99d}</Project>
+      <Name>UserKeeper.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UsersKeeper.BllContracts\UsersKeeper.BllContracts.csproj">
       <Project>{cb4ba228-57be-4699-80d0-408c79986e49}</Project>
       <Name>UsersKeeper.BllContracts</Name>

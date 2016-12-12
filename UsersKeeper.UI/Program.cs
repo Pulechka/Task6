@@ -16,7 +16,6 @@ namespace UsersKeeper.ConsoleUI
 
         private static ConsoleColor original;
 
-
         static void Main(string[] args)
         {
             try
@@ -100,7 +99,7 @@ namespace UsersKeeper.ConsoleUI
         {
             try
             {
-                IEnumerable<Award> awards = userAwardLogic.GetAllAwards();
+                IEnumerable<AwardDTO> awards = userAwardLogic.GetAllAwards();
                 int number = 0;
                 foreach (var award in awards)
                 {
@@ -118,9 +117,22 @@ namespace UsersKeeper.ConsoleUI
         {
             try
             {
-                IEnumerable<User> users = userAwardLogic.GetAllUsers().OrderBy(user => user.Name);
-                int num = 0;
+                IEnumerable<UserDTO> users = userAwardLogic.GetAllUsers().OrderBy(user => user.Name);
+                List<UserVM> usersWithAwards = new List<UserVM>();
                 foreach (var user in users)
+                {
+                    usersWithAwards.Add(new UserVM
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        BirthDate = user.BirthDate,
+                        Awards = userAwardLogic.GetUserAwards(user.Id).ToList(),
+                    });
+                }
+
+
+                int num = 0;
+                foreach (var user in usersWithAwards)
                 {
                     Console.WriteLine($"User {++num}:");
                     Console.WriteLine($"Name: {user.Name}");

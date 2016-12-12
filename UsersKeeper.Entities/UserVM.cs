@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace UsersKeeper.Entities
 {
-    public class User
+    public class UserVM
     {
         public int Age
         {
@@ -20,6 +23,6 @@ namespace UsersKeeper.Entities
         public DateTime BirthDate { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<Award> Awards { get; set; }
+        public List<AwardDTO> Awards { get; set; }
     }
 }

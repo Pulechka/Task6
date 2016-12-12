@@ -40,7 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAwardImageLogic.cs" />
     <Compile Include="IAwardLogic.cs" />
+    <Compile Include="IUserImageLogic.cs" />
     <Compile Include="IUserAwardLogic.cs" />
     <Compile Include="IUserLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

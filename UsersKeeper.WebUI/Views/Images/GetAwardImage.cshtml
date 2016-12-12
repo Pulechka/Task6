@@ -1,0 +1,19 @@
+﻿@using UsersKeeper.WebUI.Models;
+
+@{
+    var stringAwardId = Request.QueryString["id"];
+    Guid awardId;
+    if (string.IsNullOrWhiteSpace(stringAwardId) || !Guid.TryParse(stringAwardId, out awardId))
+    {
+        Response.SetStatus(HttpStatusCode.BadRequest);
+        return;
+    }
+
+    var image = Provider.AwardImageLogic.GetAwardImage(awardId);
+    if (image == null)
+    {
+        Response.SetStatus(HttpStatusCode.NotFound);
+        return;
+    }
+    Response.WriteBinary(image.BinaryData, image.Type);
+}

@@ -1,0 +1,78 @@
+﻿@using UsersKeeper.WebUI.Models
+
+@{
+    Page.Title = "User creating";
+}
+
+
+@{
+    if (IsPost)
+    {
+        var name = Request["name"];
+        DateTime birthDate = DateTime.MinValue; ;
+
+        if (!string.IsNullOrWhiteSpace(Request["birth_date"]))
+        {
+            birthDate = DateTime.Parse(Request["birth_date"]);
+        }
+
+        bool result = false;
+        if (!string.IsNullOrWhiteSpace(name) && birthDate != DateTime.MinValue)
+        {
+            try
+            {
+                result = Provider.UserAwardLogic.AddUser(name, birthDate);
+
+                if (result)
+                {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-success" role="alert">User created successfully</div>
+                    </div>
+                </div>
+                }
+                else
+                {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-danger" role="alert">Can't create user! Please, try again later</div>
+                    </div>
+                </div>
+                }
+            }
+            catch
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-danger" role="alert">Incorrect user's data!</div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-12 alert alert-danger" role="alert">User's data can't be empty!</div>
+                </div>
+            </div>
+            }
+        }
+    }
+
+<div class="row">
+    <div class="col-md-12">
+        <form class="col-md-6 col-md-push-3" method="post" enctype="multipart/form-data">
+            <h4>Enter data for new user</h4>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" name="name">
+            </div>
+            <div class="form-group">
+                <label for="birth_date">Birth date:</label>
+                <input type="date" class="form-control" name="birth_date">
+            </div>
+            <button type="submit" class="btn btn-default">Create</button>
+        </form>
+    </div>
+</div>

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UsersKeeper.DalContracts;
 using UsersKeeper.Entities;
 using UsersKeeper.BllContracts;
@@ -14,12 +12,14 @@ namespace UsersKeeper.Logic
         private const int MaxUserAge = 150;
         private IUserDao userDao;
 
+
         public UserLogic(IUserDao dao)
         {
             userDao = dao;
         }
 
-        public bool Add(string name, DateTime birthDate)
+
+        public bool AddUser(string name, DateTime birthDate)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name can't be empty or whitespace", nameof(name));
@@ -27,7 +27,7 @@ namespace UsersKeeper.Logic
             if (birthDate > DateTime.Now || birthDate.Year < DateTime.Now.Year - MaxUserAge)
                 throw new ArgumentException("Invalid birth date", nameof(birthDate));
 
-            User user = new User
+            UserDTO user = new UserDTO
             {
                 Name = name,
                 BirthDate = birthDate,
@@ -35,7 +35,7 @@ namespace UsersKeeper.Logic
 
             try
             {
-                if (userDao.Add(user))
+                if (userDao.AddUser(user))
                 {
                     return true;
                 }
@@ -47,11 +47,12 @@ namespace UsersKeeper.Logic
             }
         }
 
-        public IEnumerable<User> GetAll()
+
+        public bool DeleteUser(Guid id)
         {
             try
             {
-                return userDao.GetAll().ToList();
+                return userDao.DeleteUser(id);
             }
             catch
             {
@@ -59,11 +60,62 @@ namespace UsersKeeper.Logic
             }
         }
 
-        public bool Delete(Guid id)
+
+        public bool UpdateUser(Guid id, string newName, DateTime newBirthDate)
         {
             try
             {
-                return userDao.Delete(id);
+                return userDao.UpdateUser(id, newName, newBirthDate);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+        public IEnumerable<UserDTO> GetAllUsers()
+        {
+            try
+            {
+                return userDao.GetAllUsers().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        
+        public IEnumerable<AwardDTO> GetUserAwards(Guid userId)
+        {
+            try
+            {
+                return userDao.GetUserAwards(userId);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public bool AppointAwardToUser(Guid userId, Guid awardId)
+        {
+            try
+            {
+                return userDao.AppointAwardToUser(userId, awardId);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public bool RemoveAwardFromUser(Guid userId, Guid awardId)
+        {
+            try
+            {
+                return userDao.RemoveAwardFromUser(userId, awardId);
             }
             catch
             {

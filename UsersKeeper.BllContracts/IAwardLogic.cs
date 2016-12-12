@@ -9,7 +9,9 @@ namespace UsersKeeper.BllContracts
 {
     public interface IAwardLogic
     {
-        bool Add(string title);
-        IEnumerable<Award> GetAll();
+        bool AddAward(string title);
+        bool DeleteAward(Guid id);
+        bool UpdateAward(Guid id, string newTitle);
+        IEnumerable<AwardDTO> GetAllAwards();
     }
 }

@@ -9,8 +9,12 @@ namespace UsersKeeper.BllContracts
 {
     public interface IUserLogic
     {
-        bool Add(string name, DateTime birthDate);
-        IEnumerable<User> GetAll();
-        bool Delete(Guid id);
+        bool AddUser(string name, DateTime birthDate);
+        bool DeleteUser(Guid id);
+        bool UpdateUser(Guid id, string newName, DateTime newBirthDate);
+        IEnumerable<UserDTO> GetAllUsers();
+        bool AppointAwardToUser(Guid userId, Guid awardId);
+        bool RemoveAwardFromUser(Guid userId, Guid awardId);
+        IEnumerable<AwardDTO> GetUserAwards(Guid userId);
     }
 }

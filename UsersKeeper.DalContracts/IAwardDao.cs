@@ -9,7 +9,9 @@ namespace UsersKeeper.DalContracts
 {
     public interface IAwardDao
     {
-        IEnumerable<Award> GetAll();
-        bool Add(Award award);
+        IEnumerable<AwardDTO> GetAllAwards();
+        bool AddAward(AwardDTO award);
+        bool DeleteAward(Guid id);
+        bool UpdateAward(Guid id, string newTitle);
     }
 }

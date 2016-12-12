@@ -1,0 +1,108 @@
+﻿@using UsersKeeper.WebUI.Models
+@using UsersKeeper.Entities;
+
+@{
+    Page.Title = "All users";
+}
+
+@{
+    var users = Provider.UserAwardLogic.GetAllUsers().ToList();
+    var usersWithAwards = new List<UserVM>();
+
+    foreach (var user in users)
+    {
+        usersWithAwards.Add(new UserVM
+        {
+            Id = user.Id,
+            Name = user.Name,
+            BirthDate = user.BirthDate,
+            Awards = Provider.UserAwardLogic.GetUserAwards(user.Id).ToList(),
+        });
+
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        @foreach (var user in usersWithAwards)
+            {
+            <div class="col-md-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <div class="user-name">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                @user.Name
+                            </div>
+                            <form method="post" action="~/Views/Users/Edit">
+                                <input type="hidden" class="invisible" name="id" value="@user.Id" />
+                                <input type="hidden" class="invisible" name="name" value="@user.Name" />
+                                <input type="hidden" class="invisible" name="birth-date" value="@user.BirthDate" />
+                                <button type="submit" class="btn btn-primary btn-edit" name="btn-edit">&#9998;</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <p>@user.BirthDate.ToShortDateString() (@user.Age years)</p>
+                        <img src="~/Views/Images/GetUserImage?id=@user.Id" />
+
+                            @if (user.Awards.Count > 0)
+                            {
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle awards_btn" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Awards
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        @for (int i = 0; i < user.Awards.Count; i++)
+                                        {
+                                            <li class="award_li">
+                                                <div class="row">
+                                                    <form method="post" action="~/Views/Users/RemoveAward">
+
+                                                        <div class="col-xs-4">
+                                                            <img class="img-responsive" src="~/Views/Images/GetAwardImage?id=@user.Awards[i].Id" />
+                                                        </div>
+                                                        <div class="col-xs-8">
+
+                                                            <span>@user.Awards[i].Title</span>
+
+                                                            <input type="hidden" class="invisible" name="user-id" value="@user.Id" />
+                                                            <input type="hidden" class="invisible" name="award-id" value="@user.Awards[i].Id" />
+                                                            <button type="submit" class="btn btn-danger btn-xs pull-right" name="btn-remove-award">X</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </li>
+
+                                            if (i < user.Awards.Count - 1)
+                                            {
+                                                <li role="separator" class="divider"></li>
+                                                }
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="no_awards">No Awards</span>
+                            }
+
+                            <div class="row buttons">
+                                <form class="col-md-6" method="post" action="~/Views/Users/AppointAward">
+                                    <input type="hidden" class="invisible" name="user-id" value="@user.Id" />
+                                    <input type="hidden" class="invisible" name="user-name" value="@user.Name" />
+                                    <button type="submit" class="btn btn-primary" name="btn-appoint_award">Appoint award</button>
+                                </form>
+                                <form class="col-md-6" method="post" action="~/Views/Users/Delete">
+                                    <input type="hidden" class="invisible" name="id" value="@user.Id" />
+                                    <button type="submit" class="btn btn-danger pull-right" name="btn-delete-user">Delete user</button>
+                                </form>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿@using UsersKeeper.WebUI.Models
+
+
+@if (IsPost)
+{
+    if (Request["btn-remove-award"] != null)
+    {
+        Guid userId = Guid.Parse(Request["user-id"]);
+        Guid awardId = Guid.Parse(Request["award-id"]);
+
+        var result = Provider.UserAwardLogic.RemoveAwardFromUser(userId, awardId);
+        if (result)
+        {
+            Response.Redirect("~/Views/Users/Index");
+        }
+        else
+        {
+            Response.SetStatus(HttpStatusCode.BadRequest);
+        }
+    }
+}
+else
+{
+    Response.SetStatus(HttpStatusCode.NotFound);
+}

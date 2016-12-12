@@ -7,10 +7,9 @@ using UsersKeeper.Entities;
 
 namespace UsersKeeper.DalContracts
 {
-    public interface IUserAwardDao
+    public interface IAwardImageDao
     {
-        IEnumerable<UserAward> GetAll();
-        bool Add(UserAward userAward);
-        bool DeleteByUserId(Guid idUser);
+        ImageDTO GetAwardImage(Guid awardId);
+        bool SetAwardImage(ImageDTO image);
     }
 }

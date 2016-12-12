@@ -41,7 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAwardDao.cs" />
-    <Compile Include="IUserAwardDao.cs" />
+    <Compile Include="IAwardImageDao.cs" />
+    <Compile Include="IUserImageDao.cs" />
     <Compile Include="IUserDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

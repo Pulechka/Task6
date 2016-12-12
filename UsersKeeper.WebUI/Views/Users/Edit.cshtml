@@ -1,0 +1,94 @@
+﻿@using UsersKeeper.WebUI.Models
+
+@{
+    Page.Title = "User editing";
+}
+
+@{
+    Guid id = new Guid();
+    string name = string.Empty;
+    DateTime birthDate = DateTime.MinValue;
+}
+
+@{
+    if (IsPost)
+    {
+        if (Request["btn-edit"] != null)
+        {
+            id = Guid.Parse(Request["id"]);
+            name = Request["name"];
+            birthDate = DateTime.Parse(Request["birth-date"]);
+        }
+
+        if (Request["btn-update"] != null)
+        {
+            try
+            {
+                id = Guid.Parse(Request["id"]);
+                name = Request["name"];
+                birthDate = DateTime.Parse(Request["birth-date"]);
+
+
+                var imageData = Request.Files["image"];
+                if (!string.IsNullOrWhiteSpace(imageData.FileName))
+                {
+                    var type = imageData.ContentType;
+                    var binary = new byte[imageData.ContentLength];
+                    using (BinaryReader reader = new BinaryReader(imageData.InputStream))
+                    {
+                        for (int i = 0; i < binary.Length; i++)
+                        {
+                            binary[i] = reader.ReadByte();
+                        }
+                    }
+                    Provider.UserImageLogic.SetUserImage(id, type, binary);
+                }
+
+                var result = Provider.UserAwardLogic.UpdateUser(id, name, birthDate);
+                if (result)
+                {
+                    Response.Redirect("~/Views/Users/Index");
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12 alert alert-danger" role="alert">Can't save editing user! Please, try again later</div>
+                        </div>
+                    </div>
+                }
+            }
+            catch (Exception ex)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 alert alert-danger" role="alert">Can't save editing user! Please, try again later</div>
+                    </div>
+                </div>
+            }
+        }
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form class="col-md-6 col-md-push-3" method="post" enctype="multipart/form-data">
+            <h4>Edit user data</h4>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" name="name" value="@name">
+            </div>
+            <div class="form-group">
+                <label for="birth-date">Birth Date:</label>
+                <input type="date" class="form-control" name="birth-date" value="@birthDate.ToString("yyyy-MM-dd")">
+            </div>
+            <img class="img-responsive" src="~/Views/Images/GetUserImage?id=@id" />
+            <div class="form-group">
+                <label for="image">Load image</label>
+                <input type="file" name="image">
+            </div>
+            <input type="hidden" class="invisible" name="id" value="@id" />
+            <button type="submit" class="btn btn-default" name="btn-update">Save changes</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿.awards_btn {
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.no_awards {
+    display:block;
+    margin-top: 20px;
+    height: 34px;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px;
+    padding: 5px 10px;
+}
+
+.award_li {
+    padding: 5px 10px;
+}
+
+.buttons {
+    margin-top: 15px;
+}
+
+.btn-edit {
+    position: absolute;
+    right: 30px;
+    top: 5px;
+}
+
+.user-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 185px;
+}
+
+.panel .panel-body .user-image {
+    min-height: 300px;
+}

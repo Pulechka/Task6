@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UsersKeeper.Entities
 {
-    public class Award
+    public class AwardDTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

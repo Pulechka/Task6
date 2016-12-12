@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace UsersKeeper.Entities
 {
-    public class UserAward
+    public class ImageDTO
     {
-        public Guid IdUser { get; set; }
-        public Guid IdAward { get; set; }
+        public Guid Id { get; set; }
+        public string Type { get; set; }
+        public byte[] BinaryData { get; set; }
     }
 }
