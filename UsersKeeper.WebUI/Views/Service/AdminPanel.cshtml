@@ -1,0 +1,84 @@
+﻿@using UsersKeeper.WebUI.Models
+
+@if (!User.Identity.IsAuthenticated || !User.IsInRole("Admin"))
+{
+    Response.SetStatus(HttpStatusCode.Forbidden);
+    return;
+}
+
+@{
+    Page.Title = "Admin panel";
+}
+
+@section scripts{
+    <script src="~/Scripts/admin.js"></script>
+}
+
+
+@if (IsPost)
+{
+    var login = Request["login"];
+    var isAdmin = bool.Parse(Request["isAdmin"]);
+
+    if (string.IsNullOrWhiteSpace(login))
+    {
+        Response.SetStatus(HttpStatusCode.BadRequest);
+        return;
+    }
+
+    if (isAdmin)
+    {
+        Provider.RoleProvider.AssignRole(login, "admin");
+    }
+    else
+    {
+        Provider.RoleProvider.RemoveRole(login, "admin");
+    }
+
+    if (IsAjax)
+    {
+        Response.SetStatus(HttpStatusCode.OK);
+    }
+    else
+    {
+        Response.Redirect("~/Index");
+    }
+    return;
+}
+
+<div class="row">
+    <div class="col-md-6 col-md-push-3">
+        <h4>Site users:</h4>
+
+        @{
+            var users = Provider.RoleProvider.GetAllSiteUsers().ToList();
+            var adminRoleId = Provider.RoleProvider.GetAllSiteRoles().SingleOrDefault(role => role.Name.ToLower() == "admin").Id;
+        }
+
+        <ul class="list-group">
+                @foreach (var user in users)
+                {
+                    if (user.RolesId.Any(id => id == adminRoleId))
+                    {
+                        <li class="list-group-item user row">
+                            <span class="login">@user.Login</span>
+                            @if (User.Identity.Name != user.Login)
+                            {
+                                <button class="btn btn-default pull-right button-unset-admin">Unset as Admin</button>
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item user row">
+                            <span class="login">@user.Login</span>
+                            @if (User.Identity.Name != user.Login)
+                            {
+                                <button class="btn btn-default pull-right button-set-admin">Set as Admin</button>
+                            }
+                        </li>
+                    }
+                }
+            </ul>
+    </div>
+</div>

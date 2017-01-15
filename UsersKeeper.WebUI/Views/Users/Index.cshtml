@@ -35,19 +35,24 @@
                                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                 @user.Name
                             </div>
-                            <form method="post" action="~/Views/Users/Edit">
-                                <input type="hidden" class="invisible" name="id" value="@user.Id" />
-                                <input type="hidden" class="invisible" name="name" value="@user.Name" />
-                                <input type="hidden" class="invisible" name="birth-date" value="@user.BirthDate" />
-                                <button type="submit" class="btn btn-primary btn-edit" name="btn-edit">&#9998;</button>
-                            </form>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <form method="post" action="~/Views/Users/Edit">
+                                    <input type="hidden" class="invisible" name="id" value="@user.Id" />
+                                    <input type="hidden" class="invisible" name="name" value="@user.Name" />
+                                    <input type="hidden" class="invisible" name="birth-date" value="@user.BirthDate" />
+                                    <button type="submit" class="btn btn-primary btn-edit" name="btn-edit">&#9998;</button>
+                                </form>
+                            }
                         </div>
                     </div>
                     <div class="panel-body">
                         <p>@user.BirthDate.ToShortDateString() (@user.Age years)</p>
                         <img src="~/Views/Images/GetUserImage?id=@user.Id" />
 
-                            @if (user.Awards.Count > 0)
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                        {
+                            if (user.Awards.Count > 0)
                             {
                                 <div class="dropdown">
                                     <button class="btn btn-default dropdown-toggle awards_btn" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -68,9 +73,12 @@
 
                                                             <span>@user.Awards[i].Title</span>
 
-                                                            <input type="hidden" class="invisible" name="user-id" value="@user.Id" />
-                                                            <input type="hidden" class="invisible" name="award-id" value="@user.Awards[i].Id" />
-                                                            <button type="submit" class="btn btn-danger btn-xs pull-right" name="btn-remove-award">X</button>
+                                                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                                            {
+                                                                <input type="hidden" class="invisible" name="user-id" value="@user.Id" />
+                                                                <input type="hidden" class="invisible" name="award-id" value="@user.Awards[i].Id" />
+                                                                <button type="submit" class="btn btn-danger btn-xs pull-right" name="btn-remove-award">X</button>
+                                                            }
                                                         </div>
                                                     </form>
                                                 </div>
@@ -79,7 +87,7 @@
                                             if (i < user.Awards.Count - 1)
                                             {
                                                 <li role="separator" class="divider"></li>
-                                                }
+                                            }
                                         }
                                     </ul>
                                 </div>
@@ -89,18 +97,23 @@
                                 <span class="no_awards">No Awards</span>
                             }
 
-                            <div class="row buttons">
-                                <form class="col-md-6" method="post" action="~/Views/Users/AppointAward">
-                                    <input type="hidden" class="invisible" name="user-id" value="@user.Id" />
-                                    <input type="hidden" class="invisible" name="user-name" value="@user.Name" />
-                                    <button type="submit" class="btn btn-primary" name="btn-appoint_award">Appoint award</button>
-                                </form>
-                                <form class="col-md-6" method="post" action="~/Views/Users/Delete">
-                                    <input type="hidden" class="invisible" name="id" value="@user.Id" />
-                                    <button type="submit" class="btn btn-danger pull-right" name="btn-delete-user">Delete user</button>
-                                </form>
-                            </div>
-                        </div>
+                            if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <div class="row buttons">
+                                    <form class="col-md-6" method="post" action="~/Views/Users/AppointAward">
+                                        <input type="hidden" class="invisible" name="user-id" value="@user.Id" />
+                                        <input type="hidden" class="invisible" name="user-name" value="@user.Name" />
+                                        <button type="submit" class="btn btn-primary" name="btn-appoint_award">Appoint award</button>
+                                    </form>
+                                    <form class="col-md-6" method="post" action="~/Views/Users/Delete">
+                                        <input type="hidden" class="invisible" name="id" value="@user.Id" />
+                                        <button type="submit" class="btn btn-danger pull-right" name="btn-delete-user">Delete user</button>
+                                    </form>
+                                </div>
+                            }
+                        }
+                    </div>
+
                 </div>
             </div>
         }

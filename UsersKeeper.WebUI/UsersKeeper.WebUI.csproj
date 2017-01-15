@@ -122,7 +122,12 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\admin.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\validate-registration-form.js" />
     <Content Include="Views\Users\Create.cshtml" />
     <Content Include="Views\Awards\Create.cshtml" />
     <Content Include="Views\Awards\Edit.cshtml" />
@@ -132,6 +137,10 @@
     <Content Include="Views\Users\RemoveAward.cshtml" />
     <Content Include="Views\Images\GetUserImage.cshtml" />
     <Content Include="Views\Images\GetAwardImage.cshtml" />
+    <Content Include="Views\Service\Login.cshtml" />
+    <Content Include="Views\Service\Logout.cshtml" />
+    <Content Include="Views\Service\Registration.cshtml" />
+    <Content Include="Views\Service\AdminPanel.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -168,6 +177,7 @@
     <Content Include="Views\Awards\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\MyRoleProvider.cs" />
     <Compile Include="Models\Provider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

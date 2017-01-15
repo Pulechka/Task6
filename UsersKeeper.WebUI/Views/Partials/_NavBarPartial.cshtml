@@ -12,7 +12,16 @@
                     </button>
                     <a class="navbar-brand" href="~/Index">HOME</a>
                 </div>
-                <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <p class="navbar-text navbar-right"><a href="~/Views/Service/Logout" class="navbar-link">Logout</a></p>
+                    <p class="navbar-text navbar-right"><span class="navbar-link">@User.Identity.Name</span></p>
+                }
+                else
+                {
+                    <p class="navbar-text navbar-right"><a href="~/Views/Service/Registration" class="navbar-link">Registration</a></p>
+                    <p class="navbar-text navbar-right"><a href="~/Views/Service/Login" class="navbar-link">Login</a></p>
+                }
             </div><!-- /.container-fluid -->
         </nav>
     </div>

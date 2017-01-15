@@ -1,0 +1,83 @@
+﻿@using UsersKeeper.WebUI.Models;
+
+@{ 
+    Page.Title = "Login";
+    bool isEmptyFields = false;
+    bool authFailed = false;
+}
+
+@if (IsPost)
+{
+    string login = Request["login"];
+    string password = Request["password"];
+    string remember = Request["remember"];
+
+    bool isRemember = false;
+    if (remember == "on")
+    {
+        isRemember = true;
+    }
+
+    if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password))
+    {
+        if (Provider.RoleProvider.CanLogin(login, password))
+        {
+            FormsAuthentication.SetAuthCookie(login, isRemember);
+            var returnUrl = Request["ReturnUrl"];
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                Response.Redirect("~");
+            }
+            else
+            {
+                Response.Redirect(returnUrl);
+            }
+            return;
+        }
+        else
+        {
+            authFailed = true;
+        }
+    }
+    else
+    {
+        isEmptyFields = true;
+    }
+
+}
+
+@if (isEmptyFields)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger" role="alert">Login and password can't be empty</div>
+        </div>
+    </div>
+}
+
+@if (authFailed)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger" role="alert">Incorrect login or password</div>
+        </div>
+    </div>
+}
+
+<div class="col-md-6 col-md-push-3">
+    <form action="~/Views/Service/Login" method="post">
+        <div class="form-group">
+            <label for="login">Login:</label>
+            <input type="text" class="form-control" id="login" name="login">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" name="remember"> Remember me</label>
+        </div>
+        <input type="hidden" name="ReturnUrl" value="@Request["ReturnUrl"]" />
+        <button type="submit" class="btn btn-default">Login</button>
+    </form>
+</div>

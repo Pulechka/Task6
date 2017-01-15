@@ -1,6 +1,12 @@
 ﻿@using UsersKeeper.WebUI.Models
 @using UsersKeeper.Entities;
 
+@if (!User.Identity.IsAuthenticated)
+{
+    Response.SetStatus(HttpStatusCode.Unauthorized);
+    return;
+}
+
 @{
     Page.Title = "Award appointing";
 }

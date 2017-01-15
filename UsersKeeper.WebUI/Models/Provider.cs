@@ -11,6 +11,7 @@ namespace UsersKeeper.WebUI.Models
         public static IUserAwardLogic UserAwardLogic = Providers.Provider.Instance.UserAwardLogic;
         public static IUserImageLogic UserImageLogic;
         public static IAwardImageLogic AwardImageLogic;
+        public static MyRoleProvider RoleProvider;
 
         private static IUserImageDao UserImageDao;
         private static IAwardImageDao AwardImageDao;
@@ -25,6 +26,7 @@ namespace UsersKeeper.WebUI.Models
                 LoadUserImageBllType();
                 LoadAwardImageDalType();
                 LoadAwardImageBllType();
+                LoadRoleProviderType();
             }
             catch (ConfigurationErrorsException)
             {
@@ -89,6 +91,21 @@ namespace UsersKeeper.WebUI.Models
                     break;
                 default:
                     throw new ConfigurationErrorsException($"Invalid AwardImageBllType {bllType}");
+            }
+        }
+
+        private static void LoadRoleProviderType()
+        {
+            string roleProviderType = ConfigurationManager.AppSettings["RoleProviderType"];
+            if (roleProviderType == null)
+                throw new ConfigurationErrorsException($"Missed RoleProviderType");
+            switch (roleProviderType.ToLower())
+            {
+                case "files":
+                    RoleProvider = new MyRoleProvider();
+                    break;
+                default:
+                    throw new ConfigurationErrorsException($"Invalid RoleProviderType {roleProviderType}");
             }
         }
     }

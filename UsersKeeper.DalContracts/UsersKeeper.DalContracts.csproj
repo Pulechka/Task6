@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="IAwardDao.cs" />
     <Compile Include="IAwardImageDao.cs" />
+    <Compile Include="IRoleProviderDao.cs" />
     <Compile Include="IUserImageDao.cs" />
     <Compile Include="IUserDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

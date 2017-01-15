@@ -1,5 +1,11 @@
 ﻿@using UsersKeeper.WebUI.Models
 
+@if (!User.Identity.IsAuthenticated)
+{
+    Response.SetStatus(HttpStatusCode.Unauthorized);
+    return;
+}
+
 @{
     Page.Title = "Award editing";
 }

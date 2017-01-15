@@ -43,6 +43,8 @@
     <Compile Include="AwardDTO.cs" />
     <Compile Include="ImageDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiteRoleDTO.cs" />
+    <Compile Include="SiteUserDTO.cs" />
     <Compile Include="UserDTO.cs" />
     <Compile Include="UserVM.cs" />
   </ItemGroup>

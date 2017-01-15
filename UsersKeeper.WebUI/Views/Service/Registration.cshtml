@@ -1,0 +1,75 @@
+﻿@using UsersKeeper.WebUI.Models;
+
+@section scripts {
+   <script src="~/Scripts/jquery.validate.js"></script>
+   <script src="~/Scripts/validate-registration-form.js"></script>
+}
+
+@{
+    Page.Title = "Registration";
+    bool isEmptyFields = false;
+    bool registrationSuccess = false;
+}
+
+@if (IsPost)
+{
+    string login = Request["login"];
+    string password = Request["password"];
+
+    if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password))
+    {
+        if (Provider.RoleProvider.AddUser(login, password))
+        {
+            registrationSuccess = true;
+        }
+        else
+        {
+            Response.SetStatus(HttpStatusCode.BadRequest);
+            return;
+        }
+    }
+    else
+    {
+        isEmptyFields = true;
+    }
+
+}
+
+@if (isEmptyFields)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger" role="alert">Login and password can't be empty</div>
+        </div>
+    </div>
+}
+
+@if (registrationSuccess)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-success" role="alert">Registration complete. You can login now</div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-md-6 col-md-push-3">
+        <form action="~/Views/Service/Registration" method="post" id="registationForm">
+            <div class="form-group">
+                <label for="login">Enter your login:</label>
+                <input type="text" class="form-control" id="login" name="login">
+            </div>
+            <div class="form-group">
+                <label for="password">Enter your password:</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <div class="form-group">
+                <label for="password">Repeat password:</label>
+                <input type="password" class="form-control" id="repeatPassword" name="repeatPassword">
+            </div>
+            <input type="hidden" name="ReturnUrl" value="@Request["ReturnUrl"]" />
+            <button type="submit" class="btn btn-default">Register</button>
+        </form>
+    </div>
+}
