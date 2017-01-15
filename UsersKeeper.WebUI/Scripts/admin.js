@@ -1,14 +1,9 @@
 ﻿/// <reference path="jquery-1.9.1.js" />
 /// <reference path="jquery-1.9.1.intellisense.js" />
-var $userDivs = $('.user');
 
-for (var i = 0; i < $userDivs.length; i++) {
-    $userDivs[i].addEventListener("click", onClickHandler, true);
-}
-
-function onClickHandler(e) {
+$('.user').on('click', 'button', function (e) {
     var buttonClassName = e.target.className;
-    var login = e.currentTarget.getElementsByClassName("login").item(0);
+    var login = e.target.parentElement.getElementsByClassName("login").item(0);
 
     if (buttonClassName.includes("button-set-admin")) {
         $.ajax({
@@ -40,4 +35,4 @@ function onClickHandler(e) {
             e.target.classList.add("button-set-admin");
         });
     }
-}
+});
