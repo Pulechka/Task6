@@ -10,6 +10,8 @@ namespace UsersKeeper.DalContracts
     public interface IAwardImageDao
     {
         ImageDTO GetAwardImage(Guid awardId);
+        ImageDTO GetDefaultImage();
         bool SetAwardImage(ImageDTO image);
+        bool UpdateAwardImage(ImageDTO image);
     }
 }

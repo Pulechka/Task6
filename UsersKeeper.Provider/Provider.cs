@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UsersKeeper.BllContracts;
 using UsersKeeper.DalContracts;
+using UsersKeeper.DBDal;
 using UsersKeeper.FileDal;
 using UsersKeeper.Logic;
 using UsersKeeper.MemoryDal;
@@ -77,6 +78,9 @@ namespace UsersKeeper.Providers
                 case "memory":
                     UserDao = new MemoryUserDao();
                     break;
+                case "db":
+                    UserDao = new DBUserDao();
+                    break;
                 default:
                     throw new ConfigurationErrorsException($"Invalid UserDalType {dalType}");
             }
@@ -91,6 +95,9 @@ namespace UsersKeeper.Providers
             {
                 case "files":
                     AwardDao = new FileAwardDao();
+                    break;
+                case "db":
+                    AwardDao = new DBAwardDao();
                     break;
                 default:
                     throw new ConfigurationErrorsException($"Invalid AwardDalType {dalType}");

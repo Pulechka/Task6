@@ -36,45 +36,56 @@ namespace UsersKeeper.FileDal
                 var parts = line.Split('|');
                 return new ImageDTO
                 {
-                    Id = Guid.Parse(parts[0]),
+                    OwnerId = Guid.Parse(parts[0]),
                     Type = parts[1],
                 };
-            }).SingleOrDefault(image=>image.Id == userId);
+            }).SingleOrDefault(image=>image.OwnerId == userId);
 
-            if (userImage == null)
-            {
-                userImage = new ImageDTO
-                {
-                    Id = userId,
-                    Type = "image/png",
-                    BinaryData = File.ReadAllBytes($@"{imageFolderPath}\default.png"),
-                    };
-            }
-            else
+            if (userImage != null)
             {
                 var ext = GetExtensionByType(userImage.Type);
-                userImage.BinaryData = File.ReadAllBytes($@"{imageFolderPath}\{userImage.Id}.{ext}");
+                userImage.BinaryData = File.ReadAllBytes($@"{imageFolderPath}\{userImage.OwnerId}.{ext}");
             }
             return userImage;
         }
 
         public bool SetUserImage(ImageDTO image)
         {
+            SetImage(image);
+            return true;
+        }
+
+        private void SetImage(ImageDTO image)
+        {
             var ext = GetExtensionByType(image.Type);
-            File.WriteAllBytes($@"{imageFolderPath}\{image.Id}.{ext}", image.BinaryData);
+            File.WriteAllBytes($@"{imageFolderPath}\{image.OwnerId}.{ext}", image.BinaryData);
 
             var existingId = File.ReadAllLines(imagesFileName, Encoding.Unicode).
                             Select(line => Guid.Parse(line.Split('|')[0])).
-                            FirstOrDefault(id=> id == image.Id);
+                            FirstOrDefault(id => id == image.OwnerId);
 
             if (existingId == new Guid())
             {
-                File.AppendAllLines(imagesFileName, new string[] { $"{image.Id}|{image.Type}" }, Encoding.Unicode);
+                File.AppendAllLines(imagesFileName, new string[] { $"{image.OwnerId}|{image.Type}" }, Encoding.Unicode);
             }
             else
             {
                 UpdateImageInfo(image);
             }
+        }
+
+        public ImageDTO GetDefaultImage()
+        {
+            return new ImageDTO
+            {
+                Type = "image/png",
+                BinaryData = File.ReadAllBytes($@"{imageFolderPath}\default.png"),
+            };
+        }
+
+        public bool UpdateUserImage(ImageDTO image)
+        {
+            SetImage(image);
             return true;
         }
 
@@ -93,13 +104,13 @@ namespace UsersKeeper.FileDal
                     {
                         Guid readedId = Guid.Parse(line.Split('|')[0]);
 
-                        if (readedId != image.Id)
+                        if (readedId != image.OwnerId)
                         {
                             sw.WriteLine(line, Encoding.Unicode);
                         }
                         else
                         {
-                            sw.WriteLine($"{image.Id}|{image.Type}", Encoding.Unicode);
+                            sw.WriteLine($"{image.OwnerId}|{image.Type}", Encoding.Unicode);
                         }
                     }
                 }

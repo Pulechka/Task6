@@ -19,7 +19,7 @@ namespace UsersKeeper.Logic
 
         public ImageDTO GetAwardImage(Guid awardId)
         {
-            return imageDao.GetAwardImage(awardId);
+            return imageDao.GetAwardImage(awardId) ?? imageDao.GetDefaultImage();
         }
 
         public bool SetAwardImage(Guid awardId, string type, byte[] binaryData)
@@ -35,14 +35,21 @@ namespace UsersKeeper.Logic
 
             var image = new ImageDTO
             {
-                Id = awardId,
+                OwnerId = awardId,
                 Type = type,
                 BinaryData = binaryData
             };
 
             ResizeImage(image);
 
-            return imageDao.SetAwardImage(image);
+            if (imageDao.GetAwardImage(awardId)==null)
+            {
+                return imageDao.SetAwardImage(image);
+            }
+            else
+            {
+                return imageDao.UpdateAwardImage(image);
+            }
         }
 
         private void ResizeImage(ImageDTO image)

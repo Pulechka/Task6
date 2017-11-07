@@ -24,7 +24,7 @@ namespace UsersKeeper.Logic
 
         public ImageDTO GetUserImage(Guid userId)
         {
-            return imageDao.GetUserImage(userId);
+            return imageDao.GetUserImage(userId) ?? imageDao.GetDefaultImage();
         }
 
         public bool SetUserImage(Guid userId, string type, byte[] binaryData)
@@ -40,14 +40,21 @@ namespace UsersKeeper.Logic
 
             var image = new ImageDTO
             {
-                Id = userId,
+                OwnerId = userId,
                 Type = type,
                 BinaryData = binaryData
             };
 
             ResizeImage(image);
 
-            return imageDao.SetUserImage(image);
+            if (imageDao.GetUserImage(userId) == null)
+            {
+                return imageDao.SetUserImage(image);
+            }
+            else
+            {
+                return imageDao.UpdateUserImage(image);
+            }
         }
 
 

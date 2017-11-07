@@ -16,7 +16,7 @@ namespace UsersKeeper.WebUI.Models
 
         public MyRoleProvider()
         {
-            roleProviderDao = new FileRoleProviderDao();
+            roleProviderDao = Provider.GetRoleProviderDao();
         }
 
         public override string[] GetRolesForUser(string login)

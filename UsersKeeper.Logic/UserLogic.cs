@@ -67,7 +67,7 @@ namespace UsersKeeper.Logic
             {
                 return userDao.UpdateUser(id, newName, newBirthDate);
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }

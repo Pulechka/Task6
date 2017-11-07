@@ -8,7 +8,7 @@ namespace UsersKeeper.Entities
 {
     public class ImageDTO
     {
-        public Guid Id { get; set; }
+        public Guid OwnerId { get; set; }
         public string Type { get; set; }
         public byte[] BinaryData { get; set; }
     }

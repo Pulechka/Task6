@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using UsersKeeper.BllContracts;
 using UsersKeeper.DalContracts;
+using UsersKeeper.DBDal;
 using UsersKeeper.FileDal;
 using UsersKeeper.Logic;
 
@@ -11,7 +12,7 @@ namespace UsersKeeper.WebUI.Models
         public static IUserAwardLogic UserAwardLogic = Providers.Provider.Instance.UserAwardLogic;
         public static IUserImageLogic UserImageLogic;
         public static IAwardImageLogic AwardImageLogic;
-        public static MyRoleProvider RoleProvider;
+        public static MyRoleProvider RoleProvider = new MyRoleProvider();
 
         private static IUserImageDao UserImageDao;
         private static IAwardImageDao AwardImageDao;
@@ -26,7 +27,6 @@ namespace UsersKeeper.WebUI.Models
                 LoadUserImageBllType();
                 LoadAwardImageDalType();
                 LoadAwardImageBllType();
-                LoadRoleProviderType();
             }
             catch (ConfigurationErrorsException)
             {
@@ -43,6 +43,9 @@ namespace UsersKeeper.WebUI.Models
             {
                 case "files":
                     UserImageDao = new FileUserImageDao();
+                    break;
+                case "db":
+                    UserImageDao = new DBUserImageDao();
                     break;
                 default:
                     throw new ConfigurationErrorsException($"Invalid UserImageDalType {dalType}");
@@ -74,6 +77,9 @@ namespace UsersKeeper.WebUI.Models
                 case "files":
                     AwardImageDao = new FileAwardImageDao();
                     break;
+                case "db":
+                    AwardImageDao = new DBAwardImageDao();
+                    break;
                 default:
                     throw new ConfigurationErrorsException($"Invalid AwardImageDalType {dalType}");
             }
@@ -94,16 +100,18 @@ namespace UsersKeeper.WebUI.Models
             }
         }
 
-        private static void LoadRoleProviderType()
+        public static IRoleProviderDao GetRoleProviderDao()
         {
             string roleProviderType = ConfigurationManager.AppSettings["RoleProviderType"];
             if (roleProviderType == null)
                 throw new ConfigurationErrorsException($"Missed RoleProviderType");
+
             switch (roleProviderType.ToLower())
             {
                 case "files":
-                    RoleProvider = new MyRoleProvider();
-                    break;
+                    return new FileRoleProviderDao();
+                case "db":
+                    return new DBRoleProviderDao();
                 default:
                     throw new ConfigurationErrorsException($"Invalid RoleProviderType {roleProviderType}");
             }

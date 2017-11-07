@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{82F3069E-6F1D-4F57-B1EB-D404625A5352}</ProjectGuid>
+    <ProjectGuid>{577778A3-F5A1-4BDC-88F5-541ECC6C1B99}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UsersKeeper.DI.Provider</RootNamespace>
-    <AssemblyName>UsersKeeper.DI.Provider</AssemblyName>
+    <RootNamespace>UsersKeeper.DBDal</RootNamespace>
+    <AssemblyName>UsersKeeper.DBDal</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,33 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Provider.cs" />
+    <Compile Include="DBAwardDao.cs" />
+    <Compile Include="DBAwardImageDao.cs" />
+    <Compile Include="DBRoleProviderDao.cs" />
+    <Compile Include="DBUserDao.cs" />
+    <Compile Include="DBUserImageDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UsersKeeper.BllContracts\UsersKeeper.BllContracts.csproj">
-      <Project>{CB4BA228-57BE-4699-80D0-408C79986E49}</Project>
-      <Name>UsersKeeper.BllContracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UsersKeeper.DalContracts\UsersKeeper.DalContracts.csproj">
       <Project>{d3c8a55a-2418-4ca7-a50c-f82d4bbd391d}</Project>
       <Name>UsersKeeper.DalContracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UsersKeeper.DBDal\UsersKeeper.DBDal.csproj">
-      <Project>{577778A3-F5A1-4BDC-88F5-541ECC6C1B99}</Project>
-      <Name>UsersKeeper.DBDal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UsersKeeper.FileDal\UsersKeeper.FileDal.csproj">
-      <Project>{2817473f-63d5-4db6-994a-67579dea1cad}</Project>
-      <Name>UsersKeeper.FileDal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UsersKeeper.Logic\UsersKeeper.Logic.csproj">
-      <Project>{9852c84c-3b73-4ce4-af93-ac50fec7a8d5}</Project>
-      <Name>UsersKeeper.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UsersKeeper.MemoryDal\UsersKeeper.MemoryDal.csproj">
-      <Project>{5a912deb-cf79-4796-8fc3-b27d9c9234d9}</Project>
-      <Name>UsersKeeper.MemoryDal</Name>
+    <ProjectReference Include="..\UsersKeeper.Entities\UsersKeeper.Entities.csproj">
+      <Project>{19122f6c-36f1-4cb7-9675-1ef874174a9a}</Project>
+      <Name>UsersKeeper.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

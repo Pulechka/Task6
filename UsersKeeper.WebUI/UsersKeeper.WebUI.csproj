@@ -190,6 +190,10 @@
       <Project>{D3C8A55A-2418-4CA7-A50C-F82D4BBD391D}</Project>
       <Name>UsersKeeper.DalContracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UsersKeeper.DBDal\UsersKeeper.DBDal.csproj">
+      <Project>{577778A3-F5A1-4BDC-88F5-541ECC6C1B99}</Project>
+      <Name>UsersKeeper.DBDal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UsersKeeper.Entities\UsersKeeper.Entities.csproj">
       <Project>{19122f6c-36f1-4cb7-9675-1ef874174a9a}</Project>
       <Name>UsersKeeper.Entities</Name>

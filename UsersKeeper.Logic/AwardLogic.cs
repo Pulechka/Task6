@@ -69,7 +69,7 @@ namespace UsersKeeper.Logic
             {
                 return awardDao.GetAllAwards().ToList();
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }
